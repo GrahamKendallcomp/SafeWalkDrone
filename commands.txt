@@ -1,0 +1,2 @@
+command for starting the mavproxy that will connect to the ground station:
+mavproxy.py --master=/dev/serial/by-id/usb-ArduPilot_PH4-mini_3C0036001351383137383335-if00 --out=tcpin:0.0.0.0:14550

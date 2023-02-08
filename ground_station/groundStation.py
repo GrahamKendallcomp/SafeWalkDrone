@@ -2,8 +2,9 @@ print( "Start simulator (SITL)")
 import dronekit_sitl
 sitl = dronekit_sitl.start_default()
 connection_string = sitl.connection_string()
-connection_string = "tcp:127.0.0.1:5760" #get rpi zerotier ip and port
-
+#connection_string = "tcp:10.242.25.163:1204" #get rpi zerotier ip and port
+connection_string = "tcp:10.242.215.212:14550" #get rpi zerotier ip and port
+#connection_string = "tcp:127.0.0.1:12000"
 # Import DroneKit-Python
 from dronekit import connect, VehicleMode
 
