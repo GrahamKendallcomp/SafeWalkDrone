@@ -33,10 +33,10 @@ def init():
 def shutdown(sitl, vehicle, rpiClient):
     print('Closing vehicle connection')
     vehicle.close()
-    client.exec_command('exit')
+    rpiClient.exec_command('exit')
 
     print("Closing ssh connection")
-    client.close()
+    rpiClient.close()
 
     print("Shutting down simulator")
     sitl.stop()
