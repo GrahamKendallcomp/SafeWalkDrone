@@ -2,7 +2,6 @@ import dronekit_sitl
 from dronekit import connect, VehicleMode
 from paramiko import SSHClient
 
-
 def init():
     print("Creating ssh connection to RPi")
     client = SSHClient()
