@@ -13,8 +13,6 @@ def init():
     print(stdin)
     print(stdout)
     print(stderr)
-    print("Closing ssh connection")
-    client.close()
 
     print( "Start simulator (SITL)") 
     sitl = dronekit_sitl.start_default()
@@ -30,9 +28,15 @@ def init():
     print( " System status: %s" % vehicle.system_status.state) 
     print( " Mode: %s" % vehicle.mode.name ) 
 
-    return sitl, vehicle
+    return sitl, vehicle, client
 
-def shutdown(sitl, vehicle):
+def shutdown(sitl, vehicle, rpiClient):
+    print('Closing vehicle connection')
     vehicle.close()
-    # Shut down simulator
+    client.exec_command('exit')
+
+    print("Closing ssh connection")
+    client.close()
+
+    print("Shutting down simulator")
     sitl.stop()
