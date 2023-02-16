@@ -15,3 +15,16 @@ Ensure the ground station machine is connected to the project zerotier network.
 python main.py
 
 The script should start MAVProxy on RPi and then start the automated control of the drone.
+
+
+
+
+Image Recognition:
+  !!https://github.com/mikel-brostrom/yolov8_tracking!!
+  In command prompt...
+  cd yolov8_tracking
+  pip install -r requirements.txt  # install dependencies
+
+  To run, double click Run.bat
+  
+  
