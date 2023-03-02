@@ -1,4 +1,6 @@
 import math as m
+import commands
+
 
 #bbox_left =output[0]
 #bbox_top  = output[1]
@@ -111,25 +113,6 @@ class makeInstruction:
 
 
 
-    def run(self):
-        instruction = []
-        centreScreen = (piCameraResolution[0]/2,piCameraResolution[1]/2)
-        
-        #Algorithm
-        #Check Height
-        #Check Distance from Centre
-        #Trajectory
-        if(checkHeight(self, self.bbox)[0]):
-            distanceFromCentre = isCentre(self.bbox, centreScreen)
-            if(distanceFromCentre[0],distanceFromCentre[1] == True, True):
-                #DO nothing
-            if(distanceFromCentre[0], distanceFromCentre[1]==False, True):
-                #Need to move subject vertically
-            if(distanceFromCentre[1], distanceFromCentre[0]==False,True):
-                #Need to Move subject horizontally
-            #
-            if(distanceFromCentre[1], distanceFromCentre[0]==False,False):
-                 
 
                  
 

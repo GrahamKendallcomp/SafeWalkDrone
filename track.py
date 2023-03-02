@@ -15,7 +15,6 @@ from pathlib import Path
 import torch
 import torch.backends.cudnn as cudnn
 
-import makeInstruction
 
 
 
@@ -29,6 +28,9 @@ if str(ROOT / 'yolov5') not in sys.path:
     sys.path.append(str(ROOT / 'yolov5'))  # add yolov5 ROOT to PATH
 if str(ROOT / 'trackers' / 'strongsort') not in sys.path:
     sys.path.append(str(ROOT / 'trackers' / 'strongsort'))  # add strong_sort ROOT to PATH
+#addind groundstation to path
+if str(ROOT/ 'ground_station') not in sys.path:
+    sys.path.append(str(ROOT / 'ground_station'))
 
 
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
@@ -42,11 +44,13 @@ from yolov5.utils.torch_utils import select_device, time_sync
 from yolov5.utils.plots import Annotator, colors, save_one_box
 from yolov5.utils.segment.general import masks2segments, process_mask, process_mask_native
 from trackers.multi_tracker_zoo import create_tracker
+from ground_station.makeInstruction import makeInstruction 
 
 
 @torch.no_grad()
 def run(
-        source='clip.mp4' #or 'http://10.242.37.53:8000/',
+        source='clip.mp4' #or 'http://10.242.37.53:8000/' #
+        ,
         yolo_weights=WEIGHTS / 'yolov5n-seg.pt',  # model.pt path(s),
         reid_weights=WEIGHTS / 'osnet_x0_25_msmt17.pt',  # model.pt path,
         tracking_method='strongsort',
@@ -209,6 +213,31 @@ def run(
                 with dt[3]:
                     outputs[i] = tracker_list[i].update(det.cpu(), im0)
                 
+
+
+                 #Send Results to MakeInstruction#
+                 #
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
                 # draw boxes for visualization
                 if len(outputs[i]) > 0:
                     if save_vid and is_seg:
@@ -273,8 +302,8 @@ def run(
                     cv2.resizeWindow(str(p), im0.shape[1], im0.shape[0])
 
                 #Draw 'Deadzone' Box
-                print(h,w)
-                print((0.8 * w, 0.2 * h),(0.8 * w,0.8 * h))
+                #print(h,w)
+                #print((0.8 * w, 0.2 * h),(0.8 * w,0.8 * h))
                 #cv2.line(im0, (0.8 * w, 0.2 * h),(0.8 * w,0.8 * h), 1, 3)
                 #cv2.line(im0, (0.2 * w, 0.2 * h),(0.2 * w,0.8 * h), 1, 3)
                 #cv2.line(im0, (0.2 * w, 0.8 * h),(0.8 * w,0.8 * h), 1, 3)
@@ -303,7 +332,10 @@ def run(
                 vid_writer[i].write(im0)
 
             prev_frames[i] = curr_frames[i]
-            
+
+
+
+
         # Print total time (preprocessing + inference + NMS + tracking)
         LOGGER.info(f"{s}{'' if len(det) else '(no detections), '}{sum([dt.dt for dt in dt if hasattr(dt, 'dt')]) * 1E3:.1f}ms")
 
@@ -366,6 +398,4 @@ def main(opt):
     run(**vars(opt))
 
 
-if __name__ == "__main__":
-    opt = parse_opt()
-    main(opt)
+
