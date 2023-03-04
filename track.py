@@ -45,6 +45,7 @@ from yolov5.utils.plots import Annotator, colors, save_one_box
 from yolov5.utils.segment.general import masks2segments, process_mask, process_mask_native
 from trackers.multi_tracker_zoo import create_tracker
 from ground_station.makeInstruction import makeInstruction 
+bbox_list = []
 
 
 @torch.no_grad()
@@ -214,29 +215,6 @@ def run(
                     outputs[i] = tracker_list[i].update(det.cpu(), im0)
                 
 
-
-                 #Send Results to MakeInstruction#
-                 #
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 
                 # draw boxes for visualization
                 if len(outputs[i]) > 0:
@@ -288,11 +266,17 @@ def run(
                             if save_crop:
                                 txt_file_name = txt_file_name if (isinstance(path, list) and len(path) > 1) else ''
                                 save_one_box(np.array(bbox, dtype=np.int16), imc, file=save_dir / 'crops' / txt_file_name / names[c] / f'{id}' / f'{p.stem}.jpg', BGR=True)
-                            
+
+
+            
             else:
                 pass
                 #tracker_list[i].tracker.pred_n_update_all_tracks()
-                
+
+
+            #UPDATE AND PASS BBOX TO INSTRUCT
+            bbox_list = outputs
+    
             # Stream results
             im0 = annotator.result()
             if show_vid:

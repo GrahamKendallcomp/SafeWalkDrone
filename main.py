@@ -1,26 +1,32 @@
-import groundStation
-#import commands 
 import threading as t
-from .. import track
+import sys
+import os
+import track
+from pathlib import Path
+
+
+from ground_station.groundStation import groundStation
+from ground_station.makeInstruction import makeInstruction
+from ground_station.commands import *
+
+
+
 
 
 
 def main():
     if __name__ == "__main__":
-        sitl, drone = groundStation.init()
+        #sitl, drone = groundStation.init()
         missionDone = False
         altitude = 2
+        #instruct = makeInstruction()
         Yolov5Thread = t.Thread(target = track.main , args =track.parse_opt)
         Yolov5Thread.start()
-        track.main(track.opt)
-
-
-
 
         #commands.arm_and_takeoff(drone, altitude)
 
         while(True):
-            #put constant yolov5 detection here
+            #Yolov5Thread.bbox_list
             #use commands.py  drone commands for drone control
             pass
             if (missionDone):

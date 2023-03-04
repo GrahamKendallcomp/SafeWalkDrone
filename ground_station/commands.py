@@ -1,5 +1,5 @@
 import dronekit_sitl
-import mavutil
+from pymavlink import mavutil
 import time
 
 def arm_and_takeoff(vehicle, aTargetAltitude):

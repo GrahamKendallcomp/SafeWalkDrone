@@ -1,6 +1,4 @@
 import math as m
-import commands
-
 
 #bbox_left =output[0]
 #bbox_top  = output[1]
@@ -53,24 +51,7 @@ def vectorInstruction(bbox):
     return (x,y,z)
 
 
-
-
-def instruct():
     
-
-
-
-
-
-
-
-
-
-    
-    
-    
-    
-
 
 def isCentre(bbox,centreScreen):
     x,y,x2,y2 = True, True,0,0
@@ -98,7 +79,8 @@ class makeInstruction:
                  frame,
                  bbox,
                  id,
-                 lastFrame
+                 lastFrame,
+                 newInstruction
 
 
     ):
@@ -110,6 +92,8 @@ class makeInstruction:
         self.frame += 1
         self.id = bbox[4]
         self.lastFrame.append((((bbox[2]-bbox[0])/2 + bbox[0]), (((bbox[3]-bbox[1])/2)+bbox[1])))
+        self.newInstruction = vectorInstruction(self.bbox)
+
 
 
 
