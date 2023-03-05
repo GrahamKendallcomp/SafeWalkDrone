@@ -19,8 +19,7 @@ def main():
         #sitl, drone = groundStation.init()
         missionDone = False
         altitude = 2
-        #instruct = makeInstruction()
-        Yolov5Thread = t.Thread(target = track.main , args =track.parse_opt)
+        Yolov5Thread = t.Thread(target = track.run, args = (**vars track.parse_opt()))
         Yolov5Thread.start()
 
         #commands.arm_and_takeoff(drone, altitude)
@@ -28,11 +27,11 @@ def main():
         while(True):
             #Yolov5Thread.bbox_list
             #use commands.py  drone commands for drone control
-            pass
+            #pass
             if (missionDone):
                 break
 
         groundStation.shutdown(sitl, drone)
-        Yolov5Thread.exit()
+        #Yolov5Thread.exit()
         
 main()

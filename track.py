@@ -48,9 +48,14 @@ from ground_station.makeInstruction import makeInstruction
 bbox_list = []
 
 
+
+temp = str(os.getcwd()+'/clip.mp4')
+print(temp)
+
+
 @torch.no_grad()
 def run(
-        source='clip.mp4' #or 'http://10.242.37.53:8000/' #
+        source= temp #http://10.242.37.53:8000/' 
         ,
         yolo_weights=WEIGHTS / 'yolov5n-seg.pt',  # model.pt path(s),
         reid_weights=WEIGHTS / 'osnet_x0_25_msmt17.pt',  # model.pt path,
@@ -380,6 +385,11 @@ def main(opt):
     check_requirements(requirements=ROOT / 'requirements.txt', exclude=('tensorboard', 'thop'))
     
     run(**vars(opt))
+
+
+if __name__ == "__main__":
+    opt = parse_opt()
+    main(opt)
 
 
 
