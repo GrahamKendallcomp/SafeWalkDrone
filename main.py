@@ -9,7 +9,8 @@ from ground_station.groundStation import groundStation
 from ground_station.makeInstruction import makeInstruction
 from ground_station.commands import *
 
-
+bboxlist = []
+yolo = track.trackclass(bboxlist)
 
 
 
@@ -19,13 +20,14 @@ def main():
         #sitl, drone = groundStation.init()
         missionDone = False
         altitude = 2
-        Yolov5Thread = t.Thread(target = track.run, args = (**vars track.parse_opt()))
-        Yolov5Thread.start()
+        yolothread = t.Thread(target = yolo.main)
+        yolothread.daemon = True
+        yolothread.start()
 
         #commands.arm_and_takeoff(drone, altitude)
 
         while(True):
-            #Yolov5Thread.bbox_list
+            yolo.
             #use commands.py  drone commands for drone control
             #pass
             if (missionDone):
