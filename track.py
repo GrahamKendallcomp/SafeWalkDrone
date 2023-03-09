@@ -49,15 +49,18 @@ from ground_station.makeInstruction import makeInstruction
 
 
 
+
 class trackclass: 
     def __init__(self,bboxlist):
         self.bboxlist = bboxlist
     
+    def updateBboxList(self,list):
+        self.bboxlist = list
 
     @torch.no_grad()
     def run(
-            source= 'http://10.242.215.212:8000/stream.mjpg' 
-            ,
+            self,
+            source= 'http://10.242.215.212:8000/stream.mjpg', 
             yolo_weights=WEIGHTS / 'yolov5n-seg.pt',  # model.pt path(s),
             reid_weights=WEIGHTS / 'osnet_x0_25_msmt17.pt',  # model.pt path,
             tracking_method='strongsort',
@@ -281,7 +284,8 @@ class trackclass:
 
 
                 #UPDATE AND PASS BBOX TO INSTRUCT
-                bbox_list = outputs
+                self.updateBboxList(outputs)
+                
         
                 # Stream results
                 im0 = annotator.result()
@@ -341,11 +345,10 @@ class trackclass:
 
 
         
-    def main(self):
-        opt = parse_opt()
-        check_requirements(requirements=ROOT / 'requirements.txt', exclude=('tensorboard', 'thop'))
-        self.run(**vars(opt))
-
+    #def main(self):
+    #    opt = parse_opt()
+    #    check_requirements(requirements=ROOT / 'requirements.txt', exclude=('tensorboard', 'thop'))
+    #    self.run(**vars(opt))
 
 def parse_opt():
     parser = argparse.ArgumentParser()
@@ -391,9 +394,11 @@ def parse_opt():
 
 
 
-#
-#if __name__ == "__main__":
+
+if __name__ == "__main__":
  #   opt = parse_opt()
-  #  main(opt)
+    boundaryboxlist = []
+    a = trackclass(boundaryboxlist)
+    a.run()
 
 

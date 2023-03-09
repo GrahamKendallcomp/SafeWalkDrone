@@ -27,7 +27,7 @@ def main():
         #commands.arm_and_takeoff(drone, altitude)
 
         while(True):
-            yolo.
+            bboxs = yolo.bboxlist #contains all the tracking data 
             #use commands.py  drone commands for drone control
             #pass
             if (missionDone):
