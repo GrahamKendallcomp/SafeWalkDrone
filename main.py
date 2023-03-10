@@ -23,12 +23,11 @@ def main():
     altitude = 2
     yoloprocess = m.Process(target = yolo.run)
     yoloprocess.start()
-
+    m.Array########
     #commands.arm_and_takeoff(drone, altitude)
 
     while(True):
         bboxlist = yolo.returnBboxList() #contains all the tracking data
-        m.yolo.returnBBoxList()
         print(bboxlist)
         #use commands.py  drone commands for drone control
         #pass
