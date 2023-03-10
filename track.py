@@ -403,12 +403,3 @@ def parse_opt():
 
 
 
-if __name__ == "__main__":
-    #opt = parse_opt()
-    boundaryboxlist = []
-    a = trackclass(boundaryboxlist)
-    y = t.Thread(target = a.run)
-    y.start()
-
-
-
