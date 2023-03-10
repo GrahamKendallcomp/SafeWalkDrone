@@ -16,6 +16,8 @@ import torch
 import torch.backends.cudnn as cudnn
 
 
+import threading as t
+
 
 
 FILE = Path(__file__).resolve()
@@ -51,22 +53,25 @@ from ground_station.makeInstruction import makeInstruction
 
 
 class trackclass: 
-    def __init__(self,bboxlist):
+    def __init__(self, bboxlist):
         self.bboxlist = bboxlist
     
     def updateBboxList(self,list):
-        self.bboxlist = list
+        bboxlist = list
+
+    def returnBboxList(self):
+        return self.bboxlist
 
     @torch.no_grad()
     def run(
             self,
-            source= 'http://10.242.215.212:8000/stream.mjpg', 
+            source= 'clip.mp4', 
             yolo_weights=WEIGHTS / 'yolov5n-seg.pt',  # model.pt path(s),
             reid_weights=WEIGHTS / 'osnet_x0_25_msmt17.pt',  # model.pt path,
             tracking_method='strongsort',
             tracking_config=None,
-            imgsz=(640, 640),  # inference size (height, width)
-            conf_thres=0.25,  # confidence threshold
+            imgsz=(640, 480),  # inference size (height, width)
+            conf_thres=0.5,  # confidence threshold
             iou_thres=0.45,  # NMS IOU threshold
             max_det=1000,  # maximum detections per image
             device='',  # cuda device, i.e. 0 or 0,1,2,3 or cpu
@@ -120,6 +125,9 @@ class trackclass:
         model = DetectMultiBackend(yolo_weights, device=device, dnn=dnn, data=None, fp16=half)
         stride, names, pt = model.stride, model.names, model.pt
         imgsz = check_img_size(imgsz, s=stride)  # check image size
+
+
+        tracking_config = ROOT / 'trackers' / tracking_method / 'configs' / (tracking_method + '.yaml' )
 
         # Dataloader
         if webcam:
@@ -396,9 +404,11 @@ def parse_opt():
 
 
 if __name__ == "__main__":
- #   opt = parse_opt()
+    #opt = parse_opt()
     boundaryboxlist = []
     a = trackclass(boundaryboxlist)
-    a.run()
+    y = t.Thread(target = a.run)
+    y.start()
+
 
 
