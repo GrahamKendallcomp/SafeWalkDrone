@@ -1,47 +1,51 @@
-var button = jQuery('.button');
-var preloader = jQuery('#preloader');
-var longitudediv = jQuery('.longitude');
-var lattitudediv = jQuery('.lattitude');
-var locationdiv = jQuery('.location');
+let map, infoWindow;
 
-if (navigator.geolocation) {  	
-	// Browser supports it, we're good to go! 
-	} else {  	
-	alert('Sorry your browser doesn\'t support the Geolocation API');	 
-	}
+function initMap() {
+  map = new google.maps.Map(document.getElementById("map"), {
+    center: { lat: -34.397, lng: 150.644 },
+    zoom: 6,
+  });
+  infoWindow = new google.maps.InfoWindow();
 
-button.click(function(e) {
-    e.preventDefault();
-    preloader.show();
-    navigator.geolocation.getCurrentPosition(exportPosition, errorPosition);
-});
+  const locationButton = document.createElement("button");
 
-function errorPosition() {  				
-	alert('Sorry couldn\'t find your location');  		  		 
-	pretext.show();  		
-	}
+  locationButton.textContent = "Pan to Current Location";
+  locationButton.classList.add("custom-map-control-button");
+  map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+  locationButton.addEventListener("click", () => {
+    // Try HTML5 geolocation.
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
 
-function exportPosition(position) {
-    // Get the geolocation properties and set them as variables 
-    latitude = position.coords.latitude;
-    longitude  = position.coords.longitude;
-    // Insert the google maps iframe and change the location using the variables returned from the API 
-    jQuery('#map').html('<iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://maps.google.co.uk/?ie=UTF8&amp;ll='+latitude+','+longitude+'&amp;spn=0.332359,0.617294&amp;t=m&amp;z=11&amp;output=embed"></iframe>');
-    longitudediv.html('Longitude: '+longitude);
-    lattitudediv.html('Latitude: '+latitude);
-    
-}
-
-//Make a call to the Google maps api to get the name of the location 
-jQuery.ajax({
-    url: 'http://maps.googleapis.com/maps/api/geocode/json?latlng='+latitude+','+longitude+'&sensor=true',
-    type: 'POST',
-    dataType: 'json',
-    success: function(data) {
-        //If Successful add the data to the 'location' div 
-   locationdiv.html('Location: '+data.results[0].address_components[2].long_name);
-    },
-    error: function(xhr, textStatus, errorThrown) {
-             errorPosition();
+          infoWindow.setPosition(pos);
+          infoWindow.setContent("Location found.");
+          infoWindow.open(map);
+          map.setCenter(pos);
+        },
+        () => {
+          handleLocationError(true, infoWindow, map.getCenter());
+        }
+      );
+    } else {
+      // Browser doesn't support Geolocation
+      handleLocationError(false, infoWindow, map.getCenter());
     }
   });
+}
+
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+  infoWindow.setPosition(pos);
+  infoWindow.setContent(
+    browserHasGeolocation
+      ? "Error: The Geolocation service failed."
+      : "Error: Your browser doesn't support geolocation."
+  );
+  infoWindow.open(map);
+}
+
+window.initMap = initMap;
