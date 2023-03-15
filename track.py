@@ -1,5 +1,5 @@
 import argparse
-
+import pickle
 import os
 # limit the number of cpus used by high performance libraries
 os.environ["OMP_NUM_THREADS"] = "1"
@@ -14,9 +14,11 @@ import numpy as np
 from pathlib import Path
 import torch
 import torch.backends.cudnn as cudnn
+import socket
 
 
-import threading as t
+import multiprocessing
+from multiprocessing import shared_memory as memory
 
 
 
@@ -46,7 +48,7 @@ from yolov5.utils.torch_utils import select_device, time_sync
 from yolov5.utils.plots import Annotator, colors, save_one_box
 from yolov5.utils.segment.general import masks2segments, process_mask, process_mask_native
 from trackers.multi_tracker_zoo import create_tracker
-from ground_station.makeInstruction import makeInstruction 
+from ground_station.makeInstruction import makeInstruction as instruct
 
 
 
@@ -55,17 +57,18 @@ from ground_station.makeInstruction import makeInstruction
 class trackclass: 
     def __init__(self, bboxlist):
         self.bboxlist = bboxlist
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     
-    def updateBboxList(self,list):
-        bboxlist = list
 
     def returnBboxList(self):
-        return self.bboxlist
+        #print(self.bboxlist)
+        outgoingList = pickle.dumps(self.bboxlist)
+        self.sock.sendto(outgoingList, ('localhost',8888))
 
     @torch.no_grad()
     def run(
             self,
-            source= 'clip.mp4', 
+            source= 'clip.mp4', #'http://10.242.215.212:8000/stream.mjpg'
             yolo_weights=WEIGHTS / 'yolov5n-seg.pt',  # model.pt path(s),
             reid_weights=WEIGHTS / 'osnet_x0_25_msmt17.pt',  # model.pt path,
             tracking_method='strongsort',
@@ -175,7 +178,15 @@ class trackclass:
                     pred = non_max_suppression(pred, conf_thres, iou_thres, classes, agnostic_nms, max_det=max_det, nm=32)
                 else:
                     pred = non_max_suppression(pred, conf_thres, iou_thres, classes, agnostic_nms, max_det=max_det)
-                
+
+
+
+            #
+            #    
+            tempbboxlist = []
+            #   
+            #
+
 
             # Process detections
             for i, det in enumerate(pred):  # detections per image
@@ -234,6 +245,7 @@ class trackclass:
 
                     
                     # draw boxes for visualization
+                    
                     if len(outputs[i]) > 0:
                         if save_vid and is_seg:
                             # Mask plotting
@@ -249,6 +261,10 @@ class trackclass:
                             id = output[4]
                             cls = output[5]
                             conf = output[6]
+                            
+                            #print(output[0:5])
+                            tempbboxlist.append(output[0:5]) 
+                        
 
                             if save_txt:
                                 # to MOT format
@@ -268,7 +284,9 @@ class trackclass:
                                 center_of_mass = (((output[2]-output[0])/2 + output[0]), (((output[3]-output[1])/2)+output[1]))
                                 int_center_of_mass = (int(center_of_mass[0]),int(center_of_mass[1]))
                                 tempid = str(int(output[4]))
-                                temp = str(names[c] +" ID: "+ tempid +", x,y: " + str(int_center_of_mass))
+                                distAway = instruct.pixelHeightDistanceAway(instruct.getBboxCentre(output[0:4])[1])
+                                distAway = str(round(distAway,2))
+                                temp = str("ID:"+ tempid+ str(int_center_of_mass) + ',' + distAway + " ft")
                                 #label = None if hide_labels else (f'{id} {temp}' if hide_conf else \
                                 #    (f'{id} {conf:.2f}' if hide_class else f'{id} {names[c]} {conf:.2f}'))
                                 color = colors(c, True)
@@ -283,7 +301,9 @@ class trackclass:
                                 if save_crop:
                                     txt_file_name = txt_file_name if (isinstance(path, list) and len(path) > 1) else ''
                                     save_one_box(np.array(bbox, dtype=np.int16), imc, file=save_dir / 'crops' / txt_file_name / names[c] / f'{id}' / f'{p.stem}.jpg', BGR=True)
-
+                        
+                        #tempbboxlist = tempbboxlist + tempbboxlist2
+                        #print(tempbboxlist)
 
                 
                 else:
@@ -292,7 +312,23 @@ class trackclass:
 
 
                 #UPDATE AND PASS BBOX TO INSTRUCT
-                self.updateBboxList(outputs)
+                #print(tempbboxlist)
+                npArrToList = iter(tempbboxlist)
+                templist = []   
+                try:
+                    for elem in npArrToList:
+                        elem = np.ndarray.tolist(elem)    
+                        #print(elem)
+                        templist.append(elem)
+                        
+                        
+                except:
+                    print('exception')
+                self.bboxlist = templist
+                #print(self.bboxlist)
+                self.returnBboxList()
+                
+                
                 
         
                 # Stream results
