@@ -3,6 +3,19 @@ html{
 	background:#222222;
 	font-family:helvetica, arial, sans-serif;
 }
+
+legend{
+	font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+	color:white;
+	text-align: center;
+}
+
+label{
+	font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+	color:white;
+	text-align: center;
+}
+
 .wrapper{
 	width:960px;
 	margin: 0 auto;
@@ -22,35 +35,16 @@ html{
 	background: #474747;
 	box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, .3);
 }
-#map .helper{
-	display: block;
-	font-weight: bold;
-	font-size: 12px;
-	color: rgb(54, 54, 54);
-	width: 180px;
-	line-height: 135%;
-	margin: 0 auto;
-	margin-top: 140px;
-}
-#map #preloader{
-	position: absolute;
-	top: 141px;
-	left: 190px;
-	display:none;
-}
-#map iframe{
-	border:1px solid black;
-}
+
 .button{
-	padding:13px 40px;
+	padding:10px 40px;
 	background-color:#00caa7;
 	color:#00caa7;
-	border-radius:3px;
-	color:white;
+	color:Black;
 	display:block;
-	text-decoration:none;
+	font-family:'Courier New', Courier, monospace;
 	box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.3);
-	width:122px;
+	width:500px;
 	margin:0 auto;
 	margin-top:20px;
 }

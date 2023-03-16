@@ -16,44 +16,44 @@
         <h1>SafeWalk LTE Controlled Drone</h1>
         <h2>Group 45</h2>
     </div>
-    
+
+    <fieldset>
+        <legend><span>Personal information</span></legend>
+        <label>First Name:</label>
+        <input type="text" id="fname" name="first_name"><br><br>
+        <label>Last Name:</label>
+        <input type="text" id="lname" name="last_name"><br><br>
+        <label>Student Number:</label>
+        <input type="number" id="studentID" name="studentID" placeholder="101******"><br><br>
+    </fieldset>
+
+    <div id="map"></div>
+
     <div class="wrapper">
         <button class="button" onclick="getLocation()">Share Location</button>          
     </div>
-    <p id="demo"></p>
+
+    <div>
+        <h3>Longitude: </h3>
+        <h3>Latitude: </h3>
+        <h3>Altitude: </h3>
+    </div>
+
     <script>
-        const x = document.getElementById("demo");
-        function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(showPosition);
-            } else {
-                x.innerHTML = "Geolocation is not supported by this browser.";
-            }
-        }
-        function showPosition(position) {
-            let latlon = position.coords.latitude + "," + position.coords.longitude;
-        
-            let img_url = "https://maps.googleapis.com/maps/api/staticmap?center="+latlon+"&zoom=14&size=400x300&sensor=false&key=YOUR_KEY";
-        
-            document.getElementById("mapholder").innerHTML = "<img src='"+img_url+"'>";
-         }
-         function showError(error) {
-            switch(error.code) {
-                case error.PERMISSION_DENIED:
-                x.innerHTML = "User denied the request for Geolocation."
-                break;
-                case error.POSITION_UNAVAILABLE:
-                x.innerHTML = "Location information is unavailable."
-                break;
-                case error.TIMEOUT:
-                x.innerHTML = "The request to get user location timed out."
-                break;
-                case error.UNKNOWN_ERROR:
-                x.innerHTML = "An unknown error occurred."
-                break;
-            }
+        function initMap() {
+          var location = {lat:45.3876, lng:-75.6960};
+          var map = new google.maps.Map(document.getElementById('map'),{
+            zoom: 4,
+            center: location
+          });
+          var marker = new google.maps.Marker({
+            position: location,
+            map: map
+          });
         }
     </script>
+    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8cjyoA0pLqRw4skJkkdtQ_Ae5-engzMk&callback=initMap"></script>
+    
     
 </body><br><br>
 
