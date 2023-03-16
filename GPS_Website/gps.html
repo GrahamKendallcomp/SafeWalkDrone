@@ -32,21 +32,15 @@
     <div id="map"></div>
 
     <div class="wrapper">
-        <button class="button">Share Location</button>          
+        <button id="button">Share Location</button>          
     </div>
 
-     <div>
-        <h3 id="long"></h3>
-        <h3 id="lat"></h3>
-        <h3 id="alt"></h3>
-    </div>
+     <p id="displayCoords"></p>
 
     <script>
-        var long = document.getElementById('long');
-        var lat = document.getElementById('lat');
-        var alt = document.getElementById('alt');
-        var button = document.getElementByClass('button');
-        button.addEventListener("click", getLocation());
+        var display = document.getElementById('displaycoords');
+        var button = document.getElementById('button');
+        button.addEventListener("click", getLocation(), showLocation());
 
         function initMap() {
             var location = {lat:45.3876, lng:-75.6960};
@@ -58,15 +52,13 @@
 
         function getLocation(){
             navigator.geolocation.getCurrentPosition(position => {
-                const{latitude, longitude} = position.coords;
+                const{latitude, longitude, altitude} = position.coords;
+                console.log(latitude);
             })
-            showLocation();
         }
 
         function showLocation(position){
-            long.innerHTML = "Longitude: " + position.coords.longitude;
-            lat.innerHTML = "Latitude: " + position.coords.latitude;
-            alt.innerHTML = "Altitude: " + position.coords.altitude;
+            display.innerHTML = "Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude + "<br>Altitude: " + position.coords.altitude;
         }
     </script>
     <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8cjyoA0pLqRw4skJkkdtQ_Ae5-engzMk&callback=initMap"></script>

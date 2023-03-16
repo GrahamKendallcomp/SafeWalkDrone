@@ -48,13 +48,13 @@ label{
 	box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, .3);
 }
 
-h3{
+#displayCoords{
 	text-align: center;
 	color: white;
 	font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
-.button{
+#button{
 	padding:10px 40px;
 	background-color:#00caa7;
 	color:#00caa7;
@@ -66,7 +66,7 @@ h3{
 	margin:0 auto;
 	margin-top:20px;
 }
-.button:hover{
+#button:hover{
 	background-color:#00b495
 }
 #results{
