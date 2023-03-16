@@ -4,8 +4,8 @@
 
 <head>
     <title>SafeWalk LTE Controlled Drone</title>
-    <link rel = "icon" href="images/carleton_safety.jpg" type = "image/x-icon">
-    <link rel="stylesheet" href="assets/css/gps.css">
+    <link rel = "icon" href="{{ url_for('static',filename='images/carleton_safety.jpg') }}" type = "image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/gps.css') }}">
     <meta charset="UTF-8">
     
     
@@ -38,7 +38,7 @@
      <p id="displayCoords"></p>
 
     <script>
-        var display = document.getElementById('displaycoords');
+        var display = document.getElementById('displayCoords');
         var button = document.getElementById('button');
         button.addEventListener("click", getLocation());
 
