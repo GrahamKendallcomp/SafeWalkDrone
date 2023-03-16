@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <title>SafeWalk LTE Controlled Drone</title>
+    <link rel = "icon" href="{{ url_for('static',filename='images/carleton_safety.jpg') }}" type = "image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/gps.css') }}">
+    <meta charset="UTF-8">
+    
+    
+</head>
+
+<body>
+    <div class="header">
+        <h1>SafeWalk LTE Controlled Drone</h1>
+        <h2>Group 45</h2>
+    </div>
+
+    <div id="fields">
+        <fieldset>
+            <legend><span>Personal information</span></legend>
+            <label>First Name:</label>
+            <input type="text" id="fname" name="first_name"><br><br>
+            <label>Last Name:</label>
+            <input type="text" id="lname" name="last_name"><br><br>
+            <label>Student #:</label>
+            <input type="number" id="studentID" name="studentID" placeholder="101******"><br>
+        </fieldset>
+    </div>
+
+    <div id="map"></div>
+
+    <p id="displayCoords"></p>
+
+    <div class="wrapper">
+        <button id="button">Request Service</button>          
+    </div><br>
+
+    <div id="livestream">
+        <img src="{{ url_for('video_feed') }}" width="100%">
+    </div>
+
+    <script>
+        var display = document.getElementById('displayCoords');
+        var button = document.getElementById('button');
+        button.addEventListener("click", getLocation());
+
+        function initMap() {
+            var location = {lat:45.3876, lng:-75.6960};
+            var map = new google.maps.Map(document.getElementById('map'),{
+            zoom: 14,
+            center: location
+            });
+            var marker = new google.maps.Marker({
+                position: location,
+                map: map
+            }); 
+        }
+
+        function getLocation(){
+            navigator.geolocation.getCurrentPosition(position => {
+                const{latitude, longitude, altitude} = position.coords;
+                display.innerHTML = "Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude + "<br>Altitude: " + position.coords.altitude;
+            })
+        }
+    </script>
+    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8cjyoA0pLqRw4skJkkdtQ_Ae5-engzMk&callback=initMap"></script>
+    
+</body>
+
+<footer>
+    <p>Resources:</p>
+    <p>"Making Websites Location Aware with HTML5 Geolocation" <a href="https://webdesign.tutsplus.com/articles/making-websites-location-aware-with-html5-geolocation--webdesign-10495">webdesign.tutsplus.com</a></p>
+    <p>"Create A Google Map In A Website | Google API Map | Learn HTML and CSS | HTML Tutorial" <a href="https://www.youtube.com/watch?v=9CY0V0JAgNU">youtube.com</a></p>
+    <p>"HTML Geolocation API" <a href="https://www.w3schools.com/html/html5_geolocation.asp">w3schools.com</a></p>
+    <p>"Geolocation Google Maps Platform" <a href="https://developers.google.com/maps/documentation/javascript/examples/map-geolocation#maps_map_geolocation-javascript">developers.google.com</a></p>
+</footer>
+
+</html>
