@@ -69,13 +69,15 @@ label{
 #button:hover{
 	background-color:#00b495
 }
-#results{
-	color: rgb(0, 180, 149);
-	position: absolute;
-	margin-top: 20px;
-	text-align: center;
-	line-height: 23px;
-	width: 100%;
+
+#livestream{
+	display: block;
+	margin: 0 auto;
+	color: #363535;
+	width: 640px;
+	height: 480px;
+	border: 1px solid black;
+	background: #474747;
 }
 
 .header{
