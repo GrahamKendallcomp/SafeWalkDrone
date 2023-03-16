@@ -31,11 +31,11 @@
 
     <div id="map"></div>
 
-    <div class="wrapper">
-        <button id="button">Share Location</button>          
-    </div>
+    <p id="displayCoords"></p>
 
-     <p id="displayCoords"></p>
+    <div class="wrapper">
+        <button id="button">Request Service</button>          
+    </div>
 
     <script>
         var display = document.getElementById('displayCoords');
@@ -48,6 +48,10 @@
             zoom: 4,
             center: location
             });
+            var marker = new google.maps.Marker({
+                position: location,
+                map: map
+            }); 
         }
 
         function getLocation(){
@@ -62,8 +66,11 @@
 </body><br><br>
 
 <footer>
-    <P>Sourced from "Making Websites Location Aware with HTML5 Geolocation" <a href="https://webdesign.tutsplus.com/articles/making-websites-location-aware-with-html5-geolocation--webdesign-10495">webdesign.tutsplus.com</a></P>
-    <P> Aaron Lumsden <a href="https://aaronlumsden.com/">aaronlumsden.com</a></P>
+    <p>Resources:</p>
+    <p>"Making Websites Location Aware with HTML5 Geolocation" <a href="https://webdesign.tutsplus.com/articles/making-websites-location-aware-with-html5-geolocation--webdesign-10495">webdesign.tutsplus.com</a></p>
+    <p>"Create A Google Map In A Website | Google API Map | Learn HTML and CSS | HTML Tutorial" <a href="https://www.youtube.com/watch?v=9CY0V0JAgNU">youtube.com</a></p>
+    <p>"HTML Geolocation API" <a href="https://www.w3schools.com/html/html5_geolocation.asp">w3schools.com</a></p>
+    <p>"Geolocation Google Maps Platform" <a href="https://developers.google.com/maps/documentation/javascript/examples/map-geolocation#maps_map_geolocation-javascript">developers.google.com</a></p>
 </footer>
 
 </html>
