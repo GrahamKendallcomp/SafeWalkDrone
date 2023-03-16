@@ -40,7 +40,7 @@
     <script>
         var display = document.getElementById('displaycoords');
         var button = document.getElementById('button');
-        button.addEventListener("click", getLocation(), showLocation());
+        button.addEventListener("click", getLocation());
 
         function initMap() {
             var location = {lat:45.3876, lng:-75.6960};
@@ -53,12 +53,8 @@
         function getLocation(){
             navigator.geolocation.getCurrentPosition(position => {
                 const{latitude, longitude, altitude} = position.coords;
-                console.log(latitude);
+                display.innerHTML = "Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude + "<br>Altitude: " + position.coords.altitude;
             })
-        }
-
-        function showLocation(position){
-            display.innerHTML = "Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude + "<br>Altitude: " + position.coords.altitude;
         }
     </script>
     <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8cjyoA0pLqRw4skJkkdtQ_Ae5-engzMk&callback=initMap"></script>
