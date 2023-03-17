@@ -22,8 +22,8 @@ class makeInstruction:
         
         #print('hello ' + bbox)
         x = pixelHeightDistanceAway(bbox[3] - bbox[1])
-        y = pixelLateralDistanceEstimation(vectorInstruction(bbox)[1],(bbox[3]-bbox[1]))
-        z = pixelLateralDistanceEstimation(vectorInstruction(bbox)[0],(bbox[3]-bbox[1]))
+        y = pixelLateralDistanceEstimation(vectorInstruction(bbox)[0],(bbox[3]-bbox[1]))
+        z = pixelLateralDistanceEstimation(vectorInstruction(bbox)[1],(bbox[3]-bbox[1]))
         if((y or z) == None):
             y=0.00
             z=0.00
