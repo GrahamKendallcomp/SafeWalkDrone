@@ -68,7 +68,7 @@ class trackclass:
     @torch.no_grad()
     def run(
             self,
-            source= 'clip.mp4', #'http://10.242.215.212:8000/stream.mjpg'
+            source=  'http://10.242.215.212:8000/stream.mjpg', #'clip.mp4',
             yolo_weights=WEIGHTS / 'yolov5n-seg.pt',  # model.pt path(s),
             reid_weights=WEIGHTS / 'osnet_x0_25_msmt17.pt',  # model.pt path,
             tracking_method='strongsort',
@@ -284,7 +284,7 @@ class trackclass:
                                 center_of_mass = (((output[2]-output[0])/2 + output[0]), (((output[3]-output[1])/2)+output[1]))
                                 int_center_of_mass = (int(center_of_mass[0]),int(center_of_mass[1]))
                                 tempid = str(int(output[4]))
-                                distAway = instruct.pixelHeightDistanceAway(instruct.getBboxCentre(output[0:4])[1])
+                                distAway = instruct.pixelHeightDistanceAway(output[3]-output[1])
                                 distAway = str(round(distAway,2))
                                 temp = str("ID:"+ tempid+ str(int_center_of_mass) + ',' + distAway + " ft")
                                 #label = None if hide_labels else (f'{id} {temp}' if hide_conf else \

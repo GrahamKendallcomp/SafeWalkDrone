@@ -9,10 +9,11 @@ import threading as t
 import tkinter as tk
 import time
 
+
 from ground_station.groundStation import groundStation
 from ground_station.makeInstruction import makeInstruction as instruct
 from ground_station.commands import *
-import queue
+
 
 
 
@@ -37,14 +38,6 @@ def main():
         data = sock.recvfrom(1024)
         output = pickle.loads(data[0])
         bboxlist = output
-        #print(bboxlist)
-        #try:
-        ##        q.queue.clear()
-            #    for items in bboxlist:
-          #         q.put(items)
-           #         #print(bboxlist)
-        #except:
-          #  print()
         #use commands.py  drone commands for drone control
         #pass
         if (missionDone):
@@ -52,61 +45,63 @@ def main():
     #groundStation.shutdown(sitl, drone)
     #Yolov5Thread.exit()
 
+
 def makeGUI():
-    # create the GUI window
     root = tk.Tk()
-    root.title("Drone Instructions")
-
-    # create two instances of the RealTimeDisplay widget
-    display1 = RealTimeInstruct(root)
-    display1.pack(side='left', padx=200, pady=200)
-    #display2 = RealTimeInstruct(root)
-    #display2.pack(side='left', padx=200, pady=200)
-
-    # start the GUI event loop
+    my_gui = GUI(root)
     root.mainloop()
 
 
 
 
-class RealTimeInstruct(tk.Frame):
-    def __init__(self, parent):
-        #self.queue = q
-        #time.sleep(6000)
-        super().__init__(parent)
-        self.label = tk.Label(self, font=('Courier', 35))
+
+
+class GUI:
+    def __init__(self, master):
+        self.master = master
+        master.title("Drone Instructions")
+        master.config(bg='light sky blue')
+
+        master.geometry('1200x200')
+        self.label = tk.Label(master, text="No Instructions Yet.", font=('courier',15), highlightbackground="light sky blue", highlightcolor='light sky blue', bg= 'light sky blue')
+        self.label.place(relx=0.5, rely=0.5, anchor='center')
         self.label.pack()
-        self.update_Contents()
-        
-        
+        self.data = bboxlist
+        self.update_label()
 
-    def update_Contents(self):
-        string = self.parseBboxList()
-        self.label.configure(text=string)
-        self.after(500, self.update_Contents)
-
-    def parseBboxList(self)->str:
-        #bboxlist = bboxlist
-        try: 
-            if(bboxlist != []):
-                if (bboxlist[0] != []):
-                    #print(bboxlist)
-                    print(bboxlist[0])
-                    temp = instruct.dataForDisplay(bboxlist[0])
-                    print(temp)
-                    word = "ID: " + str(bboxlist[0][4]) + "move forward " + str(round(temp[0],2)) +'ft' + " move laterally " +  str(round(temp[1],2)) +'ft ' + "move vertically" + str(round(temp[2],2)) + 'ft'
-                    #print(word)
-                    return word 
-                else:
-                    return 'potato'
-        except:
-            pass
+    def update_label(self):
+        # Do some calculations to get the new value
+        new_value = parseBboxList()
+        #print(new_value)
+        # Update the label with the new value
+        self.label.config(text=new_value)
+        # Schedule the update function to be called again in 1000 milliseconds (1 second)
+        self.master.after(500, self.update_label)
 
 
-    
+def parseBboxList()->str:
+    #bboxlist = bboxlist
+    data = bboxlist
+    #print(bboxlist)
+    wordlist = []
+    for bboxes in bboxlist:
+        bboxes = tuple(bboxes)
+        print(bboxes[3] - bboxes[1])
+        output = instruct.dataForDisplay(bboxes)
+        word = "ID: " + str(bboxes[4]) + "," + str(output[0]) +' ft away' + " move laterally " +  str(output[1]) +'ft ' + "move vertically " + str(output[2]) + ' ft' + '\n'
+        wordlist.append(word)             
+    print(wordlist)
+    if (wordlist != []):
+        returnString = ''.join(wordlist)
+        return returnString
+    else:
+        return "No Data Yet"
 
 
-    
+
+
+
+
 
 if __name__ == "__main__":
     main()
