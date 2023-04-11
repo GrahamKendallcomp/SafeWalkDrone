@@ -4,7 +4,6 @@ from flask import Flask, render_template, Response
 
 from camera import Camera
 
-print(os.getcwd())
 app = Flask(__name__)
 
 def gen(camera):
